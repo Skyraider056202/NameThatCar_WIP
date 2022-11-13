@@ -1,0 +1,72 @@
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/styles.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Name that Car! </title>
+</head>
+<body>
+    <div class="backgroundimage"></div>
+    <div id = "startingpage" class="intropage">    
+        <h3>I will give you select information about a car -sourced from wikipedia- and you need to guess it! Good luck...</h3>
+
+    <div id = "element"> 
+    <button id = "start_button">Start Now!</button> 
+    </div>
+    </div>
+    <div id = 'infobox' class="data"> <!--this is where the car data will go-->
+    </div>
+    <input type="text", placeholder="What's your answer? ", style="visibility: hidden", id = "textboxid">
+    <button id = "checkanswer", style="visibility: hidden">Check my answer!</button>
+
+
+    <script text="javascript">
+        let car_data = ({{data|safe|tojson}})
+        let target_car = ({{targetcar|safe|tojson}})
+        console.log(target_car)
+        var parsed_car_data = JSON.parse(car_data);
+        var car_dict_length = Object.keys(parsed_car_data).length
+        var car_dict_keys = Object.keys(parsed_car_data)
+        console.log(car_dict_length)
+        var start_button = document.getElementById('start_button')
+        var x = 0
+
+        function getdata(){
+            var carval = car_dict_keys[x] 
+            var element = parsed_car_data[carval]
+            var infobox = document.getElementById('infobox')
+            infobox.innerHTML += carval + " : " + element + "<br>"}
+            
+
+        function submission_box(){ // makes submission box  visible
+            var submission = document.getElementById('textboxid')
+            submission.style.visibility = "visible"
+            var check = document.getElementById('checkanswer')
+            check.style.visibility = 'visible'}
+        
+        
+            function deletebutton(){
+            start_button.parentNode.removeChild(start_button)} 
+
+function game(){
+    deletebutton()// deletes button
+        getdata() //gets first piece of data--if you get lucky, you could win with one tidbit, but that's unlikely
+        submission_box() // makes the submission box appear-- it should never disappear
+        document.getElementById('checkanswer').onclick = function(){  
+            var submission_text = document.getElementById('textboxid').value
+            if (submission_text == target_car){
+                var winnertext = document.getElementById('startingpage')
+                winnertext.innerHTML = 'You win'
+                return} // ends the game
+            else{
+                x++ //adds 1 to x
+                if (x > (car_dict_length-1)){ // x starts at zero, 
+                return}
+                else{
+                console.log(x) // make a try counter with a div that auto updates
+                getdata()}}}}
+    start_button.setAttribute('onclick', 'game()')
+    </script> 
+</body>
+</html>
